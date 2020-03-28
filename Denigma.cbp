@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Denigma"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Denigma">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin/Denigma" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Denigma"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Denigma/fast">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin/Denigma" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Denigma/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/ArrayUtilities.cpp">
+			<Option target="Denigma"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/CypherUtilities.cpp">
+			<Option target="Denigma"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/MCMC.cpp">
+			<Option target="Denigma"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/Randomize.cpp">
+			<Option target="Denigma"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/decipher.cpp">
+			<Option target="Denigma"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/decipher.h">
+			<Option target="Denigma"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
