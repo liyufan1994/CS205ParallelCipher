@@ -19,4 +19,5 @@ add_executable(Denigma
         src/decipher.cpp
         src/decipher.h
         src/MCMC.cpp
-        src/Randomize.cpp)
+        src/Randomize.cpp
+        src/FineSearch.cpp)

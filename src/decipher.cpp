@@ -10,6 +10,9 @@
 #include <omp.h>
 #include "decipher.h"
 
+
+
+
 int main(int argc, char** argv){
 
     int rank, size;
@@ -23,24 +26,25 @@ int main(int argc, char** argv){
     // Dimension of the key
     int Nd=95;
 
-    // Total number of samples we want
-    int T=250;
+
+    // Number of steps each iteration
+    int T=500;
 
     // Pool of chains
     int totalS=size;
 
     // Total number of iterations
-    int iterNum=150;
+    int iterNum=100;
 
     // Specify temperature of each chain
-    double lowtemp=0.1;
+    double lowtemp=100;
     double temps[totalS];
     // double increment=(totalS==1)? 0 : ((1-lowtemp)/(totalS-1));
     for (int i=0; i<totalS; ++i)
     {
         temps[i]=lowtemp;//1-increment*i;
     }
-    temps[0]=1;
+    temps[0]=10000;
 
     // Generate the ciphered file
     if (rank==0)
@@ -52,7 +56,7 @@ int main(int argc, char** argv){
             cipherkey[i]=Nd-2-i;
         }
         cipherkey[Nd-1]=Nd-1;
-        rndpermutation(cipherkey,Nd,cipherkey);
+        //rndpermutation(cipherkey,Nd,cipherkey);
 
         // Use the cipher key to cipher the original file at this path: file2cipher
         std::string file2cipher="../data/code.txt";
@@ -60,13 +64,11 @@ int main(int argc, char** argv){
         buildCiphered(file2cipher, cipheredfile, cipherkey);
     }
 
-
-    // Build transition matrix for reference text--count frequency of character pairs in reference text
+    // Count frequency of character pairs in reference text
     int **R;
     create2Dmemory(R, Nd, Nd);
-    std::string referencetxt="../data/wap.txt";
+    std::string referencetxt="../data/ak.txt";
     buildTransitionMat(R, Nd,referencetxt);
-
 
     // Count frequency of character pairs in the ciphered text (located at path: cipheredtxt)
     int **C;
@@ -74,22 +76,45 @@ int main(int argc, char** argv){
     std::string cipheredtxt="../data/ciphered.txt";
     buildTransitionMat(C, Nd,cipheredtxt);
 
-    
     // Decipher the text using api temperedChains and store output in [result] variable below
     int result[Nd];
     temperedChains(iterNum, totalS, Nd, T, R, C, temps, result, rank, size);
 
-    if (rank==0)
-    {
-        // Print the result
-        print1Darray(result,Nd);
-        printf("Target:%f\n", logtarget(result,Nd,R,C,1));
 
-        // Use the key found to decipher the ciphered text and store it at this path: decipheredtext
-        std::string decipheredtext="../data/deciphered.txt";
-        cipherkey2decipherkey(result,result,Nd);
-        buildDeciphered(cipheredtxt,decipheredtext,result);
-    }
+    // Print the result
+    if (rank==0) print1Darray(result, Nd);
+    if (rank==0) printf("Target:%f\n", logtarget(result, Nd, R, C, 1));
+
+
+    // Use the key found to decipher the ciphered text and store it at this path: decipheredtext
+    std::string decipheredtext = "../data/deciphered.txt";
+    cipherkey2decipherkey(result, result, Nd);
+    buildDeciphered(cipheredtxt, decipheredtext, result);
+
+
+    // Put deciphered file into a string for finer processing
+    std::string g_cipheredstring=readcodefile(cipheredtxt);
+    std::string decipheredstring=buildDecipheredstring(g_cipheredstring, result);
+    if (rank==0) printf("%s\n",decipheredstring.c_str());
+
+    std::map<std::string, int> g_dict;
+    buildWordsFreqMap("../data/google-10000-english-usa.txt", g_dict);
+
+
+    int CWFS;
+    double percwords;
+    int wordcount;
+    CWFScore(decipheredstring, CWFS, percwords, g_dict,wordcount);
+    if (rank==0) printf("CWFS: %d\n", CWFS);
+    if (rank==0) printf("percwords: %f\n", percwords);
+
+
+    int resultfine[Nd];
+    fineOptimize(result,Nd,10000,g_cipheredstring,resultfine,g_dict,rank);
+    decipheredstring=buildDecipheredstring(g_cipheredstring, resultfine);
+    MPI_Barrier(MPI_COMM_WORLD);
+    if (rank==0) printf("%s\n",decipheredstring.c_str());
+
 
     free2Dmemory(C, Nd, Nd);
     free2Dmemory(R, Nd, Nd);

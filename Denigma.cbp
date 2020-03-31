@@ -76,6 +76,9 @@
 		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/CypherUtilities.cpp">
 			<Option target="Denigma"/>
 		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/FineSearch.cpp">
+			<Option target="Denigma"/>
+		</Unit>
 		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/MCMC.cpp">
 			<Option target="Denigma"/>
 		</Unit>

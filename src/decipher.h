@@ -11,6 +11,7 @@ int unifrndint(int a, int b);
 int rndpermutation(int *inputarr, int inputarr_len, int *outputarr);
 int rndswap(int *x, int x_len, int *x_swapped);
 void rndkofn(int *input, int *output, int n, int k);
+int rndswapwtidx(int *x, int x_len, int *x_swapped, int &swap1, int &swap2);
 
 /* ArrayUtilities.cpp */
 int assignRow(int **A, int a[], int N, int r);
@@ -32,12 +33,12 @@ char decipher(char ch, int *decipherkey);
 void cipherkey2decipherkey(int *cipherkey, int *decipherkey, int Nd);
 void buildCiphered(std::string inputfile, std::string outputfile, int *cipherkey);
 void buildDeciphered(std::string inputfile, std::string outputfile, int *decipherkey);
+std::string buildDecipheredstring(std::string inputstring,  int *decipherkey);
+std::string readcodefile(std::string inputfile);
 
-
-
-
-
-
-
+/* FineSearch.cpp */
+void buildWordsFreqMap(std::string dicttext, std::map<std::string, int> &dict);
+void CWFScore(std::string inputstr, int &CWFS, double &percwords, std::map<std::string, int> g_dict, int &wordcount);
+void fineOptimize(int * x, int Nd, int TT, std::string cipheredstring, int * output, std::map<std::string, int> g_dict, int rank);
 
 

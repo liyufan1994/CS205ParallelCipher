@@ -53,8 +53,7 @@ int rndswap(int *x, int x_len, int *x_swapped)
     rndpermutation(idxarr, x_len, idx_pered);
     int swap1=idx_pered[0];
     int swap2=idx_pered[1];
-    //printf("swap1:%d\n", swap1);
-    //printf("swap2:%d\n", swap2);
+
 
     for (int j=0; j<x_len; ++j)
     {
@@ -72,10 +71,48 @@ int rndswap(int *x, int x_len, int *x_swapped)
         }
     }
 
-    // d is the dimension of the state
     return 0;
 
 }
+
+int rndswapwtidx(int *x, int x_len, int *x_swapped, int &swap1, int &swap2)
+{
+
+    int idxarr[x_len];
+
+    for (int j=0; j<x_len; ++j)
+    {
+        idxarr[j]=j;
+    }
+
+    // Permute the idxarr
+    int idx_pered[x_len];
+    rndpermutation(idxarr, x_len, idx_pered);
+    swap1=idx_pered[0];
+    swap2=idx_pered[1];
+
+
+    for (int j=0; j<x_len; ++j)
+    {
+        if (j==swap1)
+        {
+            x_swapped[j]=x[swap2];
+        }
+        else if (j==swap2)
+        {
+            x_swapped[j]=x[swap1];
+        }
+        else
+        {
+            x_swapped[j]=x[j];
+        }
+    }
+
+    return 0;
+
+}
+
+
 
 /*
  * The function returns a real number uniformly sampled between a,b

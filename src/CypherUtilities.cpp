@@ -23,6 +23,39 @@ void buildDeciphered(std::string inputfile, std::string outputfile, int *deciphe
     }
 }
 
+
+/*
+ * Given file path, read it and return it as a string
+ * */
+std::string readcodefile(std::string inputfile)
+{
+    std::fstream fin(inputfile, std::fstream::in);
+    char ch;
+    std::string string2ret;
+
+    while (fin >> std::noskipws >> ch) {
+        string2ret+=ch;
+    }
+    return string2ret;
+}
+
+
+/*
+ * Receive an input string and decipher it using decipher key and return deciphered string
+ *
+ * */
+std::string buildDecipheredstring(std::string inputstring,  int *decipherkey)
+{
+    std::string tempstr="";
+
+    for (char const &c: inputstring) {
+        tempstr+=decipher(c, decipherkey);
+    }
+
+    return tempstr;
+}
+
+
 void cipherkey2decipherkey(int *cipherkey, int *decipherkey, int Nd)
 {
     int container[Nd];
