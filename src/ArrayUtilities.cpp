@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <mpi.h>
 #include <omp.h>
-#include "decipher.h"
+#include "ArrayUtilities.h"
 
 void deepcopy1Darray(int *input, int *output, int Nd)
 {
@@ -16,6 +16,18 @@ void deepcopy1Darray(int *input, int *output, int Nd)
     {
         output[i]=input[i];
     }
+}
+
+void deepcopy2Darray(int **input, int **output, int height, int width)
+{
+    for (int i=0; i<height; ++i)
+    {
+        for (int j=0; i<width; ++j)
+        {
+            output[i][j]=input[i][j];
+        }
+    }
+
 }
 
 
@@ -42,7 +54,32 @@ void print1Darray(int* x, int Nd)
     std::cout << std::endl;
 }
 
+void create3Dmemory(int ***&ptr, int layers, int height, int width)
+{
+    ptr=new int **[layers];
+    for(int j = 0; j <layers; ++j)
+    {
+        ptr[j] = new int*[height];
+        for(int i = 0; i <height; ++i)
+            ptr[j][i] = new int[width];
+    }
 
+}
+
+void free3Dmemory(int ***&ptr, int layers, int height, int width)
+{
+
+    for(int j = 0; j <layers; ++j)
+    {
+        for(int i = 0; i <height; ++i)
+            delete[] ptr[j][i];
+
+        delete[] ptr[j];
+    }
+
+    delete[] ptr;
+
+}
 
 void create2Dmemory(int **&ptr, int height, int width)
 {

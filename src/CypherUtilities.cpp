@@ -9,6 +9,7 @@
 #include <mpi.h>
 #include <omp.h>
 #include "decipher.h"
+#include "ArrayUtilities.h"
 
 
 

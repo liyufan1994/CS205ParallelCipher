@@ -9,6 +9,8 @@
 #include <mpi.h>
 #include <omp.h>
 #include "decipher.h"
+#include "ArrayUtilities.h"
+#include "Randomize.h"
 using namespace std;
 
 

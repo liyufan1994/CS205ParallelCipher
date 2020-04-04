@@ -17,21 +17,79 @@
 					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="rebuild_cache">
-				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
-				<Option type="4"/>
-				<MakeCommands>
-					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
-				</MakeCommands>
-			</Target>
 			<Target title="edit_cache">
 				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
 				<Option type="4"/>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ArrayUtils">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib/libArrayUtils.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 ArrayUtils"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ArrayUtils/fast">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib/libArrayUtils.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 ArrayUtils/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Ising">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin/Ising" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Ising"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Ising/fast">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin/Ising" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Ising/fast"/>
 					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
 					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
@@ -45,6 +103,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Denigma"/>
@@ -61,6 +120,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Denigma/fast"/>
@@ -69,8 +129,56 @@
 					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Sampling">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib/libSampling.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Sampling"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Sampling/fast">
+				<Option output="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib/libSampling.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src"/>
+					<Add directory="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/lib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 Sampling/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
 		</Build>
 		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/ArrayUtilities.cpp">
+			<Option target="ArrayUtils"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/ArrayUtilities.h">
+			<Option target="Ising"/>
 			<Option target="Denigma"/>
 		</Unit>
 		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/CypherUtilities.cpp">
@@ -79,10 +187,23 @@
 		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/FineSearch.cpp">
 			<Option target="Denigma"/>
 		</Unit>
-		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/MCMC.cpp">
-			<Option target="Denigma"/>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/Ising.cpp">
+			<Option target="Ising"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/Ising.h">
+			<Option target="Ising"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/IsingMCMC.cpp">
+			<Option target="Ising"/>
 		</Unit>
 		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/Randomize.cpp">
+			<Option target="Sampling"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/Randomize.h">
+			<Option target="Ising"/>
+			<Option target="Denigma"/>
+		</Unit>
+		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/cipherMCMC.cpp">
 			<Option target="Denigma"/>
 		</Unit>
 		<Unit filename="/Users/liyufan/Dropbox/ADAM/CS205/CS205ParallelCipher/src/decipher.cpp">

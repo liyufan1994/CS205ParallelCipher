@@ -9,6 +9,8 @@
 #include <mpi.h>
 #include <omp.h>
 #include "decipher.h"
+#include "Randomize.h"
+#include "ArrayUtilities.h"
 
 
 
@@ -106,8 +108,8 @@ void fineOptimize(int * x, int Nd, int TT, std::string cipheredstring, int * out
 
         std::string decipheredstringprop=buildDecipheredstring(cipheredstring, xprop);
         CWFScore(decipheredstringprop, CWFSprop, percwordsprop, g_dict,wordcountprop);
-        printf("Prev: %f\n",percwordsprev);
-        printf("Proposal: %f\n",percwordsprop);
+        //printf("Prev: %f\n",percwordsprev);
+        //printf("Proposal: %f\n",percwordsprop);
 
         if ((percwordsprev<percwordsprop)&&(wordcountprop>=wordcountprev))
         {
@@ -115,12 +117,13 @@ void fineOptimize(int * x, int Nd, int TT, std::string cipheredstring, int * out
             percwordsprev=percwordsprop;
             CWFSprev=CWFSprop;
             wordcountprev=wordcountprop;
-            printf("Hello this is process %d\n", rank);
+            /*printf("Hello this is process %d\n", rank);
             printf("Number of char: %d\n",wordcountprop);
-            printf("%s\n",decipheredstringprop.c_str());
+            printf("%s\n",decipheredstringprop.c_str());*/
 
             // At this point, broadcasting x to all other MPI processes' x.
             MPI_Bcast(x,Nd,MPI_INT,rank,MPI_COMM_WORLD);
+
         }
     }
 

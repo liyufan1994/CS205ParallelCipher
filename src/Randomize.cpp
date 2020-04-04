@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <mpi.h>
 #include <omp.h>
-#include "decipher.h"
+#include "Randomize.h"
 
 
 

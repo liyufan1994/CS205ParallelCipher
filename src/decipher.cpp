@@ -8,7 +8,10 @@
 #include <algorithm>
 #include <mpi.h>
 #include <omp.h>
+#include <chrono>
+
 #include "decipher.h"
+#include "ArrayUtilities.h"
 
 
 
@@ -79,7 +82,6 @@ int main(int argc, char** argv){
     // Decipher the text using api temperedChains and store output in [result] variable below
     int result[Nd];
     temperedChains(iterNum, totalS, Nd, T, R, C, temps, result, rank, size);
-
 
     // Print the result
     if (rank==0) print1Darray(result, Nd);
