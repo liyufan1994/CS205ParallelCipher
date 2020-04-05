@@ -11,3 +11,5 @@ void create2Dmemory(int **&ptr, int height, int width);
 void create3Dmemory(int ***&ptr, int layers, int height, int width);
 void free3Dmemory(int ***&ptr, int layers, int height, int width);
 void deepcopy2Darray(int **input, int **output, int height, int width);
+void conv2Dto1D(int ** input, int *output, int height, int width);
+void conv1Dto2D(int *input, int **output, int height, int width);

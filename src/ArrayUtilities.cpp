@@ -10,6 +10,28 @@
 #include <omp.h>
 #include "ArrayUtilities.h"
 
+void conv2Dto1D(int ** input, int *output, int height, int width)
+{
+    for (int i=0; i<height; ++i)
+    {
+        for (int j=0; j<width; ++j)
+        {
+            output[i*height+j]=input[i][j];
+        }
+    }
+}
+
+void conv1Dto2D(int *input, int **output, int height, int width)
+{
+    for (int i=0; i<height; ++i)
+    {
+        for (int j=0; j<width; ++j)
+        {
+            output[i][j]=input[i*height+j];
+        }
+    }
+}
+
 void deepcopy1Darray(int *input, int *output, int Nd)
 {
     for (int i=0; i<Nd; ++i)
@@ -22,7 +44,7 @@ void deepcopy2Darray(int **input, int **output, int height, int width)
 {
     for (int i=0; i<height; ++i)
     {
-        for (int j=0; i<width; ++j)
+        for (int j=0; j<width; ++j)
         {
             output[i][j]=input[i][j];
         }
