@@ -26,47 +26,40 @@
 
 int main(int argc, char** argv){
 
+    // The Ising lattice will be of size Nd x Nd
+    int Nd = (argc > 1) ? atoi(argv[1]) : 32;
 
+    // ID of MPI process and number of MPI processes respectively
     int rank, size;
 
-    /* Initialize MPI and get rank and size */
+    // Initialize MPI and get rank and size
     MPI_Init(NULL, NULL);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-    // Dimension of the key
-    int Nd=32;
 
     // Number of steps each iteration
     int T=5;
 
     // Pool of chains
-    int totalS=size;
+    int totalS=size*2;
 
     // Total number of iterations
     int iterNum=100;
 
     // Specify temperature of each chain
-    double lowtemp=0.35;
+    // If totalS=1, the sole chain will only simulate the high temperature
+    double lowtemp=0.3;
+    double hightemp=0.6;
+
     double temps[totalS];
-    // double increment=(totalS==1)? 0 : ((1-lowtemp)/(totalS-1));
+    double increment=(totalS==1)? 0 : ((hightemp-lowtemp)/(totalS-1));
+
     for (int i=0; i<totalS; ++i)
     {
-        temps[i]=lowtemp;//1-increment*i;
+        temps[i]=hightemp-increment*i;
     }
-    temps[0]=0.35;
+    temperedChainsIsing(iterNum, totalS, Nd, T, temps,  rank, size,1);
 
-
-
-    int **result;
-    create2Dmemory(result,Nd,Nd);
-    temperedChainsIsing(iterNum, totalS, Nd, T, temps, result, rank, size);
-
-    // Print the result
-
-
-
-    free2Dmemory(result, Nd, Nd);
     MPI_Finalize();
     return 0;
 }

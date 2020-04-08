@@ -20,15 +20,13 @@ int main(int argc, char** argv){
 
     int rank, size;
 
-    /* Initialize MPI and get rank and size */
+    // Initialize MPI and get rank and size
     MPI_Init(NULL, NULL);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-
     // Dimension of the key
     int Nd=95;
-
 
     // Number of steps each iteration
     int T=500;
@@ -42,7 +40,7 @@ int main(int argc, char** argv){
     // Specify temperature of each chain
     double lowtemp=100;
     double temps[totalS];
-    // double increment=(totalS==1)? 0 : ((1-lowtemp)/(totalS-1));
+
     for (int i=0; i<totalS; ++i)
     {
         temps[i]=lowtemp;//1-increment*i;
@@ -102,14 +100,10 @@ int main(int argc, char** argv){
     std::map<std::string, int> g_dict;
     buildWordsFreqMap("../data/google-10000-english-usa.txt", g_dict);
 
-
     int CWFS;
     double percwords;
     int wordcount;
     CWFScore(decipheredstring, CWFS, percwords, g_dict,wordcount);
-    if (rank==0) printf("CWFS: %d\n", CWFS);
-    if (rank==0) printf("percwords: %f\n", percwords);
-
 
     int resultfine[Nd];
     fineOptimize(result,Nd,10000,g_cipheredstring,resultfine,g_dict,rank);

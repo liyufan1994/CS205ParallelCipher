@@ -8,7 +8,9 @@
 #include <algorithm>
 #include <mpi.h>
 #include <omp.h>
+#include <fstream>
 #include "ArrayUtilities.h"
+
 
 void conv2Dto1D(int ** input, int *output, int height, int width)
 {
@@ -125,20 +127,34 @@ void free2Dmemory(int **ptr, int height, int width)
 
 
 
-void print2Darray(int **myArray, int height, int width)
+void print2Darray(int **myArray, int height, int width, std::string filenm)
 {
-    for (int i = 0; i < height; ++i)
+
+    if (filenm=="std")
     {
-        for (int j = 0; j < width; ++j)
+        for (int i = 0; i < height; ++i)
         {
-            std::cout << myArray[i][j] << ' ';
+            for (int j = 0; j < width; ++j)
+            {
+                std::cout << myArray[i][j] << ' ';
+            }
+
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
+    } else {
+        std::ofstream myfile (filenm);
+        for (int i = 0; i < height; ++i)
+        {
+            for (int j = 0; j < width; ++j)
+            {
+                myfile << myArray[i][j] << ' ';
+            }
+
+            myfile << std::endl;
+        }
     }
+
 }
-
-
-
 
 
 

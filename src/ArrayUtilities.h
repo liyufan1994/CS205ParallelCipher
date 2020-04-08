@@ -2,7 +2,7 @@
 int assignRow(int **A, int a[], int N, int r);
 void deepcopy1Darray(int *input, int *output, int Nd);
 void print1Darray(int* x, int Nd);
-void print2Darray(int **myArray, int height, int width);
+void print2Darray(int **myArray, int height, int width, std::string filenm="std");
 void init2Darray(int **A, int height, int width, int filler);
 double GetAverage(double num[], int n);
 double GetStd(double num[], int n);
