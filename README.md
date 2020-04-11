@@ -17,7 +17,8 @@ Consider a NxN matrix of entries of +1 or -1. This matrix is called an Ising lat
 
 <img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" width="400" height="400" />
 <img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" />
-![Image](https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png)
+![Image](doc/image/IsingSquare.png)
+<img src="/doc/image/IsingSquare.png" />
 
 A site has four neighbors: sites that is above, below, right, or left to it. For any two adjacent sites i,j, there is an interaction <img src="https://render.githubusercontent.com/render/math?math=J_{ij}">. The energy of a configuration <img src="https://render.githubusercontent.com/render/math?math=\delta">  is given by the Hamiltonian function:
 
