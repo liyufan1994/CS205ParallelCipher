@@ -15,17 +15,7 @@ In this section, we give a succint account of two problems we seek to solve with
 ### Statistical Mechanics: Simulating Ising Lattice
 Consider a NxN matrix of entries of +1 or -1. This matrix is called an Ising lattice and each entry is a site of the lattice and +1, -1 denotes the site's spin. A spin configuration is an assignment of spin value to each lattice site.
 
-<a href="url"><img src="doc/image/IsingSquare.png" width="400" height="400" ></a>
-
 <img src="doc/image/IsingSquare.png" width="400" height="400" >
-
-<img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" />
-
-![alternativetext](doc/image/IsingSquare.png)
-
-![alternativetext](doc/image/IsingSquare.png=400x400)
-
-<img src="/doc/image/IsingSquare.png" />
 
 A site has four neighbors: sites that is above, below, right, or left to it. For any two adjacent sites i,j, there is an interaction <img src="https://render.githubusercontent.com/render/math?math=J_{ij}">. The energy of a configuration <img src="https://render.githubusercontent.com/render/math?math=\delta">  is given by the Hamiltonian function:
 
@@ -79,13 +69,13 @@ The Gibbs updates for strip partition proceeds as follows:
 3. An OpenMP barrier is placed until all threads have reached their last row (but has not updated it);
 4. All OpenMP threads update the last rows of their strip.
 
-<img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/Stripped.png" width="500" height="420">
+<img src="doc/image/Stripped.png" width="500" height="420">
 
 The reason for this updating schedule is that each sites is dependent on the current value their four neighbors. So it is not possible to update all sites simultaneously at once. The last row of each strip is then left un-updated until the first row of the next strip has been updated by the other OpenMP thread. 
 
 The checkerboard decomposition uses a more efficient partition scheme. The key observation is that each cell's updates depend only on its four neighboring cells (up, down, left and right). For this reason, all the black sites' update are independent of all the white sites and vice versa:
 
-<img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/Checkerboard2.png" width="500" height="200">
+<img src="doc/image/Checkerboard2.png" width="500" height="200">
 
 The updating schedule for checkerboard decomposition is therefore as follows:
 1. Update all white sites in parallel using as many OpenMP threads as possible by the similar conditional probability rule: Each entry is assigned +1 with probability <img src="https://render.githubusercontent.com/render/math?math=\frac{\exp(\beta s_i)}{\exp(\beta s_i) \dagger \exp(-\beta s_i)}"> (otherwise assign -1) where <img src="https://render.githubusercontent.com/render/math?math=s_i"> denotes sum of four neighboring sites of i. Note that here each entry 
@@ -110,7 +100,7 @@ In the last section, we discussed how to parallelize each individual chain in th
 
 First consider the following illustration for Replica Exchange MCMC Sampling:
 
-<img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/ParTempering2.png" width="500" height="300">
+<img src="doc/image/ParTempering2.png" width="500" height="300">
 
 
 The replica exchange MCMC sampling algorithm proceeds as follows:
