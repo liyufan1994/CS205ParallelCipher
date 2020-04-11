@@ -15,10 +15,13 @@ In this section, we give a succint account of two problems we seek to solve with
 ### Statistical Mechanics: Simulating Ising Lattice
 Consider a NxN matrix of entries of +1 or -1. This matrix is called an Ising lattice and each entry is a site of the lattice and +1, -1 denotes the site's spin. A spin configuration is an assignment of spin value to each lattice site.
 
-<img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" width="400" height="400" />
+<a href="url"><img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" width="400" height="400" ></a>
 <img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" />
-![p](doc/image/IsingSquare.png)
-![p](doc/image/IsingSquare.png|width=100)
+
+![alternativetext](doc/image/IsingSquare.png)
+
+![alternativetext](doc/image/IsingSquare.png=400x400)
+
 <img src="/doc/image/IsingSquare.png" />
 
 A site has four neighbors: sites that is above, below, right, or left to it. For any two adjacent sites i,j, there is an interaction <img src="https://render.githubusercontent.com/render/math?math=J_{ij}">. The energy of a configuration <img src="https://render.githubusercontent.com/render/math?math=\delta">  is given by the Hamiltonian function:
