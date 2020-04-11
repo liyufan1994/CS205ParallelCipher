@@ -15,7 +15,10 @@ In this section, we give a succint account of two problems we seek to solve with
 ### Statistical Mechanics: Simulating Ising Lattice
 Consider a NxN matrix of entries of +1 or -1. This matrix is called an Ising lattice and each entry is a site of the lattice and +1, -1 denotes the site's spin. A spin configuration is an assignment of spin value to each lattice site.
 
-<a href="url"><img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" width="400" height="400" ></a>
+<a href="url"><img src="doc/image/IsingSquare.png" width="400" height="400" ></a>
+
+<img src="doc/image/IsingSquare.png" width="400" height="400" >
+
 <img src="https://github.com/liyufan1994/CS205ParallelMCMC/blob/master/doc/image/IsingSquare.png" />
 
 ![alternativetext](doc/image/IsingSquare.png)
