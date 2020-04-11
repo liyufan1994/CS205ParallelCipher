@@ -53,6 +53,17 @@ Parallelize Replica Exchange MCMC Sampling is often applied to sample <img src="
 ## Algorithms and Parallelization Strategy
 We will first introduce replica exchange MCMC sampling and why a hybrid of distributed memory processing (MPI) and shared-memory processing (OpenMP) will be a particularly suitable solution for parallelization.
 
+### Architectural Overview
+The overall archetecture is represented in the following diagram:
+
+<img src="doc/image/Achetecture.png" width="600" height="550">
+
+The overall procedure may be summarized as:
+1. Assign S Markov chains to N MPI process where each process is hosted on one computing node; Ideally, each node run one Markov chain;
+2. Each Markov chain target a specific temperature level of the target distribution (See details below);
+3. Each MPI process run a chain through multiple OpenMP threads, parallelizing computation of target density or Gibbs update sites (See details below)
+4. The Markov chains are run independently for K steps before they exchange states (See details below); this is repeated for T iterations
+
 ### Parallelize Individual MCMC Chains with OpenMP
 The replica exchange MCMC sampling algorithm run S parallel Markov chains denoted as <img src="https://render.githubusercontent.com/render/math?math=X_t^{(1)}, X_t^{(2)},...,X_t^{(S)}"> at time t=1,2,.... Each step of a chain is referred to as a state and each state could be a number (one-dimensional), an n-array, or a n-by-n matrix. 
 
@@ -100,7 +111,7 @@ In the last section, we discussed how to parallelize each individual chain in th
 
 First consider the following illustration for Replica Exchange MCMC Sampling:
 
-<img src="doc/image/ParTempering2.png" width="500" height="300">
+<img src="doc/image/ParTempering.jpg" width="500" height="400">
 
 
 The replica exchange MCMC sampling algorithm proceeds as follows:
