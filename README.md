@@ -80,7 +80,7 @@ The Gibbs updates for strip partition proceeds as follows:
 3. An OpenMP barrier is placed until all threads have reached their last row (but has not updated it);
 4. All OpenMP threads update the last rows of their strip.
 
-<img src="doc/image/Stripped.png" width="500" height="420">
+<img src="doc/image/Stripped.png" width="500" height="400">
 
 The reason for this updating schedule is that each sites is dependent on the current value their four neighbors. So it is not possible to update all sites simultaneously at once. The last row of each strip is then left un-updated until the first row of the next strip has been updated by the other OpenMP thread. 
 
@@ -111,7 +111,7 @@ In the last section, we discussed how to parallelize each individual chain in th
 
 First consider the following illustration for Replica Exchange MCMC Sampling:
 
-<img src="doc/image/ParTempering.jpg" width="500" height="400">
+<img src="doc/image/ParTempering.jpg" width="500" height="330">
 
 
 The replica exchange MCMC sampling algorithm proceeds as follows:
@@ -125,10 +125,92 @@ We use different exchange schedule for the Ising model application and the decip
 
 The deciphering application follows a "star model". In particular, the proposal will be to exchange chain 1 and chain i sequentially. The reason for doing this is that we would like chain 1 to be the solution key at the end. As a result, we would like to constantly check if other chains have obtained a more optimal solution.
 
+## Reproduction Instructions and System Specification
+This code may be run on local machine or a cluster. Please check the dependencies below. But it was mainly run on CANNON computing cluster at Harvard FAS Research computing. We will provide instructions and slurm commands. 
+
+### Operating System and distribution
+Our testing is done on Linux system (CentOS) but it should also work with Mac OS once one has the required compiler and MPI installed.
+
+```
+  Operating System: CentOS Linux 7 (Core)
+       CPE OS Name: cpe:/o:centos:centos:7
+            Kernel: Linux 3.10.0-957.12.1.el7.x86_64
+```
+
+### Compiler and MPI
+You must have Intel or GCC compiler that supports OpenMP (the "-fopenmp" tag). For this project, we will use GCC of the following version:
+```
+Thread model: posix
+gcc version 9.2.0 (GCC) 
+```
+
+We use Open MPI of the following version for this project:
+```
+(Open MPI) 4.0.2
+```
+
+It is also required that cmake is installed on the system:
+```
+cmake version 2.8.12.2
+```
+
+These softwares may be loaded on Cannon Cluster through the following command:
+```
+module load gcc/9.2.0-fasrc01 openmpi/4.0.2-fasrc01
+```
+
+Or if one prefers to use Intel C compiler (better OpenMP threads affinity support):
+```
+module load intel/19.0.5-fasrc01 openmpi/4.0.1-fasrc01
+```
+
+### Hardware Archetecture
+The following information is provided at the Harvard FAS research computing website: 
+
+"The new Cannon cluster is primarily comprised of 670 Lenovo SD650 NeXtScale servers, part of their new liquid-cooled Neptune line. Each chassis unit contains two nodes, each containing two Intel 8268 "Cascade Lake" processors and 192GB RAM per node. The nodes are interconnected by HDR 100 Gbps Infiniband (IB) in a single Fat Tree with a 200 Gbps IB core. "
+
+In particular, the CPU information of each node is given below:
+
+```
+lscpu
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                48
+On-line CPU(s) list:   0-47
+Thread(s) per core:    1
+Core(s) per socket:    24
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 85
+Model name:            Intel(R) Xeon(R) Platinum 8268 CPU @ 2.90GHz
+Stepping:              7
+CPU MHz:               1199.896
+CPU max MHz:           3900.0000
+CPU min MHz:           1200.0000
+BogoMIPS:              5800.00
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              1024K
+L3 cache:              36608K
+NUMA node0 CPU(s):     0-23
+NUMA node1 CPU(s):     24-47
+```
+
+To request nodes, one can either initiate an interative mode where one can interact with the reuqested resource or submit a job through slurm batch file. Our expriment is conducted in the interative mode where the following line is used to request resources:
+
+```
+srun -p test -n 8 -N 8 -c 12 --pty --mem 1000 -t 0-30:00 /bin/bash
+```
+
+This corresponds to 8 tasks on 8 nodes where each node is equipped with 12 CPUs (i.e. maximum 12 OpenMP threads per node). 
 
 
 
-The instruction to compile and run the project:
+### The instruction to compile and run the project:
 
 1. Clone the repo from github
 2. Find the paths to mpicc and mpic++ compiler on your own machine by typing 
@@ -144,6 +226,8 @@ and "/usr/local/bin/mpic++" with the paths you find in step 2.
 
 `set(CMAKE_CXX_COMPILER /usr/local/bin/mpic++)`
 
+This step tell the cmake which compiler to use
+
 4. In the root directory, type
 
 `$ cmake .`
@@ -151,7 +235,27 @@ and "/usr/local/bin/mpic++" with the paths you find in step 2.
 `$ make`
 
 
-5. Go to bin directory, type the following to run the code (with 2 tasks)
+5. Go to bin directory, you will find the following two executables; Ising is the executable for Ising model application whereas Denigma is the executable for decryption application
 
-`$ mpirun -np 2 ./Denigma`
+`Ising`
+
+`Denigma`
+
+6. Type the following to run the code (with 4 tasks)
+
+`$ mpirun -np 4 ./Denigma`
+
+`$ mpirun -np 4 ./Ising`
+
+7. One may alter number of OpenMP threads by setting OMP_NUM_THREAD environment variable before mpirun;
+
+`$ export OMP_NUM_THREADS=6`
+
+
+8. One may adjust OpenMP NUMA thread affinity by setting KMP_AFFINITY environment variable (for Intel compiler) or GOMP_CPU_AFFINITY (for GCC). For example,
+
+`$ export GOMP_CPU_AFFINITY="0-5"`
+
+`$ export KMP_AFFINITY=verbose,compact`
+
 
