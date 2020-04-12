@@ -215,47 +215,76 @@ This corresponds to 8 tasks on 8 nodes where each node is equipped with 12 CPUs 
 1. Clone the repo from github
 2. Find the paths to mpicc and mpic++ compiler on your own machine by typing 
 
-`$ which mpicc`
+```$ which mpicc```
 
-`$ which mpic++`
+```$ which mpic++```
 
 3. Go to root directory and modify the following lines in the CMakeList.txt file: replace "/usr/local/bin/mpicc" 
 and "/usr/local/bin/mpic++" with the paths you find in step 2.
 
-`set(CMAKE_C_COMPILER /usr/local/bin/mpicc)`
+```set(CMAKE_C_COMPILER /usr/local/bin/mpicc)```
 
-`set(CMAKE_CXX_COMPILER /usr/local/bin/mpic++)`
+```set(CMAKE_CXX_COMPILER /usr/local/bin/mpic++)```
 
 This step tell the cmake which compiler to use
 
 4. In the root directory, type
 
-`$ cmake .`
+```$ cmake .```
 
-`$ make`
+```$ make```
 
 
 5. Go to bin directory, you will find the following two executables; Ising is the executable for Ising model application whereas Denigma is the executable for decryption application
 
-`Ising`
+```Ising```
 
-`Denigma`
+```Denigma```
 
 6. Type the following to run the code (with 4 tasks)
 
-`$ mpirun -np 4 ./Denigma`
+```$ mpirun -np 4 ./Denigma```
 
-`$ mpirun -np 4 ./Ising`
+```$ mpirun -np 4 ./Ising```
 
 7. One may alter number of OpenMP threads by setting OMP_NUM_THREAD environment variable before mpirun;
 
-`$ export OMP_NUM_THREADS=6`
+```$ export OMP_NUM_THREADS=6```
 
 
 8. One may adjust OpenMP NUMA thread affinity by setting KMP_AFFINITY environment variable (for Intel compiler) or GOMP_CPU_AFFINITY (for GCC). For example,
 
-`$ export GOMP_CPU_AFFINITY="0-5"`
+```$ export GOMP_CPU_AFFINITY="0-5"```
 
-`$ export KMP_AFFINITY=verbose,compact`
+```$ export KMP_AFFINITY=verbose,compact```
 
 
+
+## Performance Evaluation 
+We apply the paralleled replica exchange MCMC algorithm to two distinct problems: Ising lattice simulation and decryption. The purpose of testing the algorithm of two problems (as opposed to one) is that these two problems tend to reflect different aspects of the performance of the algorithm. In particular, we use different benchmark for these two applications. For the Ising model, we focus on testing raw computing speed and scalability of the algorithm as we increase the problem size (size of the lattice and number of chains in the ensemble). For the decryption problem, we can explicitly evaluate improvement of decryption accuracy under fixed time budget--with MPI-level parallelization we can run more chains to broaden our search and avoid minima trap whereas with OpenMP-lvel parallelization we can run longer chains to make the search more thorough. So the benchmakr now is accuracy of the algorithm under fixed time budget. 
+
+### Ising Model
+
+#### Experiment Set-up and Benchmark
+The experiment setup is the following: we have a NxN 2D Ising lattice and we run a replica exchange MCMC algorithm of S parallel Markov chains. Temperature level is set to be equal intervals between 0.3 to 0.6 where so that the temperature of the first chain is 0.6, second chain 0.6-(0.6-0.3)/S, the third chain 0.6-2x(0.6-0.3)/S and so forth. We may scale the problem by changing N and S. We assume Note that the code will assign more than one chain to an
+
+#### Scalability with Fixed Problem Size (Strong Scaling)
+In this section, we test algorithm performance with fixed problem size but increasing number of MPI processes and OpenMP threads. Recall that speedup for a fixed problem size with respect to the number of processors is governed by Amdahl's law. 
+
+#### Scalability with Increasing problem size (Weak Scaling)
+In this section, we test performance of the algorithm when the problem size is scaled to the number of processors. Recall that this is governed by Gustafson's law.
+
+#### Compare Checkerboard and Strip Decomposition
+In this section, we fix both the problem size and number of parallel processors/threads and compare the performance using strip and checkboard decomposition.
+
+
+### Break Substitution Cipher
+
+#### Accuracy gain with more MPI processes
+In this section, we test the improvement in decryption accuracy under fixed time budget when we increase number of parallel MPI processes. This should result in more parallel Markov chains in the ensemble whereas each chain is run for about the same duration (or shorter due to parallelization overhead). This should lead to more consistent result (success in finding global maximum rather than local minimums).
+
+#### Accuracy gain with more OpenMP threads
+In this section, we test the improvement in decryption accuracy under fixed time budget when we increase number of parallel OpenMP threads. This should result in longer chains and a more thorough search.
+
+#### Accuracy gain with more MPI processes and more OpenMP threads
+In this section, we test the improvement in decryption accuracy under fixed time budget when we increase both the number of parallel MPI processes and OpenMP threads.
