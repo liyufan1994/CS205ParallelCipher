@@ -56,7 +56,7 @@ We will first introduce replica exchange MCMC sampling and why a hybrid of distr
 ### Architectural Overview
 The overall archetecture is represented in the following diagram:
 
-<img src="doc/image/Achetecture.png" width="600" height="550">
+<img src="doc/image/Achitecture.png" width="600" height="550">
 
 The overall procedure may be summarized as:
 1. Assign S Markov chains to N MPI process where each process is hosted on one computing node; Ideally, each node run one Markov chain;
