@@ -261,7 +261,7 @@ This step tell the cmake which compiler to use
 
 
 ## Performance Evaluation 
-We apply the paralleled replica exchange MCMC algorithm to two distinct problems: Ising lattice simulation and decryption. The purpose of testing the algorithm of two problems (as opposed to one) is that these two problems tend to reflect different aspects of the performance of the algorithm. In particular, we use different benchmark for these two applications. For the Ising model, we focus on testing raw computing speed and scalability of the algorithm as we increase the problem size (size of the lattice and number of chains in the ensemble). For the decryption problem, we can explicitly evaluate improvement of decryption accuracy under fixed time budget--with MPI-level parallelization we can run more chains to broaden our search and avoid minima trap whereas with OpenMP-lvel parallelization we can run longer chains to make the search more thorough. So the benchmakr now is accuracy of the algorithm under fixed time budget. 
+We apply the paralleled replica exchange MCMC algorithm to two distinct problems: Ising lattice simulation and decryption. The purpose of testing the algorithm of two problems (as opposed to one) is that these two problems tend to reflect different aspects of the performance of the algorithm. In particular, we use different benchmark for these two applications. For the Ising model, we focus on testing raw computing speed and scalability of the algorithm as we increase the problem size (size of the lattice and number of chains in the ensemble). For the decryption problem, we can explicitly evaluate improvement of decryption accuracy under fixed time budget--with MPI-level parallelization we can run more chains to broaden our search and avoid minima trap whereas with OpenMP-level parallelization we can run longer chains to make the search more thorough. So the benchmark now is the accuracy of the algorithm under a fixed time budget. 
 
 ### Ising Model
 
@@ -269,7 +269,7 @@ We apply the paralleled replica exchange MCMC algorithm to two distinct problems
 The experiment setup is the following: we have a NxN 2D Ising lattice and we run a replica exchange MCMC algorithm of S parallel Markov chains. Temperature level is set to be equal intervals between 0.3 to 0.6 where so that the temperature of the first chain is 0.6, second chain 0.6-(0.6-0.3)/S, the third chain 0.6-2x(0.6-0.3)/S and so forth. We may scale the problem by changing N and S. We assume Note that the code will assign more than one chain to an
 
 #### Scalability with Fixed Problem Size (Strong Scaling)
-In this section, we test algorithm performance with fixed problem size but increasing number of MPI processes and OpenMP threads. Recall that speedup for a fixed problem size with respect to the number of processors is governed by Amdahl's law. 
+In this section, we test algorithm performance with a fixed problem size but increasing number of MPI processes and OpenMP threads. Recall that speedup for a fixed problem size with respect to the number of processors is governed by Amdahl's law. 
 
 #### Scalability with Increasing problem size (Weak Scaling)
 In this section, we test performance of the algorithm when the problem size is scaled to the number of processors. Recall that this is governed by Gustafson's law.
