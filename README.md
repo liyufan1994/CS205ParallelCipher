@@ -219,7 +219,7 @@ This corresponds to 8 tasks on 8 nodes where each node is equipped with 12 CPUs 
 
 ```$ which mpic++```
 
-3. Go to root directory and modify the following lines in the CMakeList.txt file: replace "/usr/local/bin/mpicc" 
+3. Go to root directory and modify the following lines in the CMakeLists.txt file: replace "/usr/local/bin/mpicc" 
 and "/usr/local/bin/mpic++" with the paths you find in step 2.
 
 ```set(CMAKE_C_COMPILER /usr/local/bin/mpicc)```
