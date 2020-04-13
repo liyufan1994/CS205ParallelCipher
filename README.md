@@ -82,7 +82,7 @@ The Gibbs updates for strip partition proceeds as follows:
 
 <img src="doc/image/Stripped.png" width="500" height="400">
 
-The reason for this updating schedule is that each sites is dependent on the current value their four neighbors. So it is not possible to update all sites simultaneously at once. The last row of each strip is then left un-updated until the first row of the next strip has been updated by the other OpenMP thread. 
+The reason for this updating schedule is that each sites is dependent on the current value of their four neighbors. So it is not possible to update all sites simultaneously at once. The last row of each strip is then left un-updated until the first row of the next strip has been updated by the other OpenMP thread. 
 
 The checkerboard decomposition uses a more efficient partition scheme. The key observation is that each cell's updates depend only on its four neighboring cells (up, down, left and right). For this reason, all the black sites' update are independent of all the white sites and vice versa:
 
