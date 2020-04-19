@@ -247,13 +247,13 @@ void oneChainIsing(int **x, int T, int Nd, double temp)
 {
 #pragma omp parallel shared(x)
     {
-        int numthreads=2;
-        for (int threadid=0; threadid<numthreads; ++threadid)
-        {
+        //int numthreads=2;
+        //for (int threadid=0; threadid<numthreads; ++threadid)
+        //{
             for (int t=0; t<T; ++t)
             {
-                //int threadid = omp_get_thread_num();
-                //int numthreads = omp_get_num_threads();
+                int threadid = omp_get_thread_num();
+                int numthreads = omp_get_num_threads();
 
                 if (Nd/numthreads<=1)
                 {
@@ -304,7 +304,7 @@ void oneChainIsing(int **x, int T, int Nd, double temp)
                             x[i][j]=0;
                         }
                     }
-                }
+               }
 
                 // put a barrier here go ensure all threads update the last row on new values from neighboring regions
 #pragma omp barrier
@@ -348,7 +348,7 @@ void oneChainIsing(int **x, int T, int Nd, double temp)
 #pragma omp barrier
 
             }
-        }
+        //}
 
     }
 }

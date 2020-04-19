@@ -18,6 +18,8 @@
 
 int main(int argc, char** argv){
 
+    int Sp = (argc > 1) ? atoi(argv[1]) : 1;
+
     int rank, size;
 
     // Initialize MPI and get rank and size
@@ -32,7 +34,7 @@ int main(int argc, char** argv){
     int T=500;
 
     // Pool of chains
-    int totalS=size;
+    int totalS=size*Sp;
 
     // Total number of iterations
     int iterNum=100;
@@ -109,7 +111,23 @@ int main(int argc, char** argv){
     fineOptimize(result,Nd,10000,g_cipheredstring,resultfine,g_dict,rank);
     decipheredstring=buildDecipheredstring(g_cipheredstring, resultfine);
     MPI_Barrier(MPI_COMM_WORLD);
-    if (rank==0) printf("%s\n",decipheredstring.c_str());
+    if (rank==0)
+    {
+        printf("%s\n",decipheredstring.c_str());
+        std::string originals=readcodefile("../data/code.txt");
+        double correct=0;
+        double sum=0;
+        for (std::string::size_type i=0; i<originals.size(); ++i)
+        {
+           sum=sum+1;
+           if (originals[i]==decipheredstring[i])
+           {
+	        correct=correct+1;
+           }
+        }
+        printf("Accuracy: %f\n", (correct)/(sum));
+    }
+    
 
 
     free2Dmemory(C, Nd, Nd);

@@ -29,6 +29,13 @@ int main(int argc, char** argv){
     // The Ising lattice will be of size Nd x Nd
     int Nd = (argc > 1) ? atoi(argv[1]) : 32;
 
+    // Each MPI will run S chains
+    int S = (argc > 2) ? atoi(argv[2]) : 1;    
+
+    // What decomposition to use: 0-strip, 1-checkerboard
+    int D = (argc > 3) ? atoi(argv[3]) : 1; 
+
+    
     // ID of MPI process and number of MPI processes respectively
     int rank, size;
 
@@ -38,10 +45,10 @@ int main(int argc, char** argv){
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     // Number of steps each iteration
-    int T=5;
+    int T=1;
 
     // Pool of chains
-    int totalS=size*2;
+    int totalS=size*S;
 
     // Total number of iterations
     int iterNum=100;
@@ -58,8 +65,9 @@ int main(int argc, char** argv){
     {
         temps[i]=hightemp-increment*i;
     }
-    temperedChainsIsing(iterNum, totalS, Nd, T, temps,  rank, size,1);
+    temperedChainsIsing(iterNum, totalS, Nd, T, temps,  rank, size,D);
 
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
     return 0;
 }
