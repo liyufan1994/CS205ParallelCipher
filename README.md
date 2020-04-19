@@ -215,76 +215,232 @@ This corresponds to 8 tasks on 8 nodes where each node is equipped with 12 CPUs 
 1. Clone the repo from github
 2. Find the paths to mpicc and mpic++ compiler on your own machine by typing 
 
-```$ which mpicc```
+```
+$ which mpicc
+```
 
-```$ which mpic++```
+```
+$ which mpic++
+```
 
 3. Go to root directory and modify the following lines in the CMakeLists.txt file: replace "/usr/local/bin/mpicc" 
 and "/usr/local/bin/mpic++" with the paths you find in step 2.
 
-```set(CMAKE_C_COMPILER /usr/local/bin/mpicc)```
+```
+set(CMAKE_C_COMPILER /usr/local/bin/mpicc)
+```
 
-```set(CMAKE_CXX_COMPILER /usr/local/bin/mpic++)```
+```
+set(CMAKE_CXX_COMPILER /usr/local/bin/mpic++)
+```
 
 This step tell the cmake which compiler to use
 
 4. In the root directory, type
 
-```$ cmake .```
+```
+$ cmake .
+```
 
-```$ make```
+```
+$ make
+```
 
 
 5. Go to bin directory, you will find the following two executables; Ising is the executable for Ising model application whereas Denigma is the executable for decryption application
 
-```Ising```
+```
+Ising
+```
 
-```Denigma```
+```
+Denigma
+```
 
 6. Type the following to run the code (with 4 tasks)
 
-```$ mpirun -np 4 ./Denigma```
+```
+$ mpirun -np 4 ./Denigma
+```
 
-```$ mpirun -np 4 ./Ising```
+```
+$ mpirun -np 4 ./Ising
+```
 
 7. One may alter number of OpenMP threads by setting OMP_NUM_THREAD environment variable before mpirun;
 
-```$ export OMP_NUM_THREADS=6```
+```
+$ export OMP_NUM_THREADS=6
+```
 
 
 8. One may adjust OpenMP NUMA thread affinity by setting KMP_AFFINITY environment variable (for Intel compiler) or GOMP_CPU_AFFINITY (for GCC). For example,
 
-```$ export GOMP_CPU_AFFINITY="0-5"```
+```
+$ export GOMP_CPU_AFFINITY="0-5"
+```
 
-```$ export KMP_AFFINITY=verbose,compact```
+```
+$ export KMP_AFFINITY=verbose,compact
+```
 
-
+## Overhead and Mitigation Strategy
 
 ## Performance Evaluation 
-We apply the paralleled replica exchange MCMC algorithm to two distinct problems: Ising lattice simulation and decryption. The purpose of testing the algorithm of two problems (as opposed to one) is that these two problems tend to reflect different aspects of the performance of the algorithm. In particular, we use different benchmark for these two applications. For the Ising model, we focus on testing raw computing speed and scalability of the algorithm as we increase the problem size (size of the lattice and number of chains in the ensemble). For the decryption problem, we can explicitly evaluate improvement of decryption accuracy under fixed time budget--with MPI-level parallelization we can run more chains to broaden our search and avoid minima trap whereas with OpenMP-level parallelization we can run longer chains to make the search more thorough. So the benchmark now is the accuracy of the algorithm under a fixed time budget. 
+We apply the paralleled replica exchange MCMC algorithm to two different problems: Ising lattice simulation and decryption. The purpose of testing the algorithm of two problems (as opposed to one) is that these two problems tend to reflect different aspects of the performance of the algorithm. For the Ising model, we focus on testing raw computing speed and scalability of the algorithm as we increase the problem size (size of the lattice and number of chains in the ensemble). For the decryption problem, we can explicitly evaluate improvement of decryption accuracy under fixed time budget--with MPI-level parallelization we can run more chains to broaden our search and avoid minima trap whereas with OpenMP-level parallelization we can run longer chains to make the search more thorough. 
 
 ### Ising Model
 
 #### Experiment Set-up and Benchmark
-The experiment setup is the following: we have a NxN 2D Ising lattice and we run a replica exchange MCMC algorithm of S parallel Markov chains. Temperature level is set to be equal intervals between 0.3 to 0.6 where so that the temperature of the first chain is 0.6, second chain 0.6-(0.6-0.3)/S, the third chain 0.6-2x(0.6-0.3)/S and so forth. We may scale the problem by changing N and S. We assume Note that the code will assign more than one chain to an
+The experiment setup is the following: we have a NxN 2D Ising lattice and we run a replica exchange MCMC algorithm of S parallel Markov chains. Temperature level is set to be equal intervals between 0.3 to 0.6 where so that the temperature of the first chain is 0.6, second chain 0.6-(0.6-0.3)/S, the third chain 0.6-2x(0.6-0.3)/S and so forth. For this particular application, we propose to exchange two chains every time we complete a full sweep of the Ising square. We run the chains for just 100 full sweep for the purpose of testing. Actual application may require much more sweeps to obtain simulation of higher quality: this will linearly increase the execution time -- our impelementation does not parallelize against number of full sweeps and thus we do not expect much more sweeps will change scaling behavior of our algorithm. In the experiments below, We may scale the problem size by changing N and S. Note that the code will assign more than one chain to an MPI process. In the first two sections, we present results from the Checkerboard pattern (for OpenMP parallelization). The results for strip pattern are presented in the last section where we compare these two decomposition schemes.
 
 #### Scalability with Fixed Problem Size (Strong Scaling)
-In this section, we test algorithm performance with a fixed problem size but increasing number of MPI processes and OpenMP threads. Recall that speedup for a fixed problem size with respect to the number of processors is governed by Amdahl's law. 
+In this section, we test algorithm performance with a fixed problem size (N=100, S=8) but increasing number of MPI processes and OpenMP threads. Recall that speedup for a fixed problem size with respect to the number of processors is governed by Amdahl's law. 
+
+---
+Strong Scaling Against MPI
+---
+| OpenMP Num | MPI Num | Execution time (s) | Speedup | Overhead (s) | Theoretic speedup |
+|------------|---------|--------------------|---------|--------------|-------------------|
+| 1          | 1       | 110.71             | 1.00    | 0.00         | 1                 |
+| 1          | 2       | 59.10              | 1.87    | 3.74         | 2                 |
+| 1          | 4       | 28.89              | 3.83    | 1.21         | 4                 |
+| 1          | 8       | 14.94              | 7.41    | 1.10         | 8                 |
+
+<img src="doc/image/MPIS.png">
+
+---
+Strong Scaling Against OpenMP
+---
+| OpenMP Num | MPI Num | Execution time (s) | Speedup | Overhead (s) | Theoretic speedup |
+|------------|---------|--------------------|---------|--------------|-------------------|
+| 1          | 8       | 14.94              | 1.00    | 0.00         | 1                 |
+| 2          | 8       | 8.50               | 1.76    | 1.03         | 2                 |
+| 4          | 8       | 4.55               | 3.28    | 0.82         | 4                 |
+| 6          | 8       | 3.97               | 3.77    | 1.48         | 6                 |
+
+<img src="doc/image/OMPS.png">
+
+It seems that the scaling is more efficient on the MPI direction. This is because exchange at each step only involves two of the MPI processes and thus the overhead due to this exchange is expected to be O(1) against number of MPI processes. Also the exchange is relatively lightweight. The fact we run the algorithm on high bandwidth hardware (Cannon as opposed to AWS) also contributes to the efficiency. The OpenMP carries heavier overhead mainly because the complexity of the parallelization is higher: each sweep involves OpenMP threads go through the lattice entries following the checkerboard pattern. The overhead associated with synchronizing these threads may increase with the number of threads used.
+
 
 #### Scalability with Increasing problem size (Weak Scaling)
 In this section, we test performance of the algorithm when the problem size is scaled to the number of processors. Recall that this is governed by Gustafson's law.
 
-#### Compare Checkerboard and Strip Decomposition
-In this section, we fix both the problem size and number of parallel processors/threads and compare the performance using strip and checkboard decomposition.
+---
+Weak Scaling Against Number of Chains
+---
+| Problem Size: Lattice | Problem Size: Chains | MPI Num | OpenMP Num | Execution Time (s) |
+|-----------------------|----------------------|---------|------------|--------------------|
+| 2500                  | 4                    | 1       | 1          | 14.477             |
+| 2500                  | 8                    | 2       | 1          | 14.666             |
+| 2500                  | 16                   | 4       | 1          | 15.929             |
+| 2500                  | 32                   | 8       | 1          | 14.763             |
 
+<img src="doc/image/MPIW.png">
+
+---
+Weak Scaling Against Lattice Size
+---
+| Problem Size: Lattice | Problem Size: Chains | MPI Num | OpenMP Num | Execution Time (s) |
+|-----------------------|----------------------|---------|------------|--------------------|
+| 10000                 | 8                    | 8       | 1          | 15.007             |
+| 19600                 | 8                    | 8       | 2          | 15.769             |
+| 40000                 | 8                    | 8       | 4          | 17.615             |
+| 60025                 | 8                    | 8       | 6          | 18.919             |
+
+<img src="doc/image/OMPW.png">
+
+The testing results for weak scaling confirms our observations from the strong scaling. Indeed, we observe execution time is almost constant as we scale up the problem size and number of MPI processes. On the contrary, the execution time becomes longer as we scale up problem size and number of OpenMP threads. 
+
+
+#### Compare Checkerboard and Strip Decomposition
+We present the strong and weak scaling against number of OpenMP threads when we use the strip decomposition (as opposed to checkerboard pattern in previous sections).
+
+---
+Strip Pattern: Strong Scaling (OpenMP)
+---
+| OpenMP Num | MPI Num | Execution time (s) | Speedup | Overhead (s) | Theoretic speedup |
+|------------|---------|--------------------|---------|--------------|-------------------|
+| 1          | 8       | 16.527             | 1.00    | 0.00         | 1                 |
+| 2          | 8       | 9.072              | 1.82    | 0.81         | 2                 |
+| 4          | 8       | 5.072              | 3.26    | 0.94         | 4                 |
+| 6          | 8       | 3.618              | 4.57    | 0.86         | 6                 |
+
+<img src="doc/image/OMPSS2.png">
+
+---
+Strip Pattern: Weak Scaling (OpenMP)
+---
+
+| Problem Size: Lattice | Problem Size: Chains | MPI Num | OpenMP Num | Execution Time (s) |
+|-----------------------|----------------------|---------|------------|--------------------|
+| 10000                 | 8                    | 8       | 1          | 15.216             |
+| 19600                 | 8                    | 8       | 2          | 15.563             |
+| 40000                 | 8                    | 8       | 4          | 15.669             |
+| 60025                 | 8                    | 8       | 6          | 16.987             |
+
+<img src="doc/image/OMPWS.png">
+
+Comparing these results with that of checkerboard pattern, it appears that strip patter is more efficient. One of the possible reason is that the stride size for checkerboard pattern is 2 and we need to go through the lattice twice (black sites and white sites) whereas for the strip pattern, the stride is 1 and the assignment of blocks to threads is more straightforward. That said, both methods are still comparable with checkerboard pattern can potentially accomodate larger amount of parallel threads. 
 
 ### Break Substitution Cipher
+Given certain number of chains, the problem size is fixed with number of characters (95 here). Therefore, we do not test weak scaling for this problem. We again present strong scaling results against MPI and OpenMP. An additional section is devoted to study the accuracy and number of parallel temperatures used. This allows us to directly witness the benefit of parallel tempering against using a single Markov chain. Here we run individual chain for 500 steps (as opposed to 1 full sweep in Ising model example) before they do an exchange. We run 100 iterations in total. We have much more steps than there are exchanges because the task here is to discover optimal solution from different starting point. It is more efficient to let each chain fully explore their respective region before initiating an exchange with each other. we set the temperature of the master chain as 10000 whereas we set other chains' temperature as 100. The point of doing this is that the master is always able to "absorb" the most optimal states. For example, if there is a solution state discovered by chain 5 that is especially "good", we then want to make sure that chain 5 will exchange this solution to chain 1. 
 
-#### Accuracy gain with more MPI processes
-In this section, we test the improvement in decryption accuracy under fixed time budget when we increase number of parallel MPI processes. This should result in more parallel Markov chains in the ensemble whereas each chain is run for about the same duration (or shorter due to parallelization overhead). This should lead to more consistent result (success in finding global maximum rather than local minimums).
+#### Scalability
+---
+Scaling Against MPI
+---
+| MPI Num | OpenMP Num | Accuracy | Execution time (s) | speedup | Theoretical speed up | overhead (s) |
+|---------|------------|----------|--------------------|---------|----------------------|--------------|
+| 1       | 1          | 93.5%    | 257.643            | 1.00    | 1                    | 0.00         |
+| 2       | 1          | 94.0%    | 138.699            | 1.86    | 2                    | 9.88         |
+| 4       | 1          | 92.0%    | 66.834             | 3.85    | 4                    | 2.42         |
+| 8       | 1          | 92.2%    | 35.619             | 7.23    | 8                    | 3.41         |
 
-#### Accuracy gain with more OpenMP threads
-In this section, we test the improvement in decryption accuracy under fixed time budget when we increase number of parallel OpenMP threads. This should result in longer chains and a more thorough search.
+<img src="doc/image/MPISD.png">
 
-#### Accuracy gain with more MPI processes and more OpenMP threads
-In this section, we test the improvement in decryption accuracy under fixed time budget when we increase both the number of parallel MPI processes and OpenMP threads.
+---
+Scaling Against OpenMP 
+---
+| MPI Num | OpenMP Num | Accuracy | Execution time (s) | speedup | Theoretical speed up | overhead (s) |
+|---------|------------|----------|--------------------|---------|----------------------|--------------|
+| 8       | 1          | 93.5%    | 35.73              | 1.00    | 1                    | 0.00         |
+| 8       | 2          | 94.0%    | 20.70              | 1.73    | 2                    | 2.83         |
+| 8       | 3          | 94.0%    | 16.24              | 2.20    | 3                    | 4.33         |
+| 8       | 4          | 92.4%    | 14.45              | 2.47    | 4                    | 5.52         |
+| 8       | 5          | 93.8%    | 13.64              | 2.62    | 5                    | 6.50         |
+| 8       | 6          | 93.3%    | 11.60              | 3.08    | 6                    | 5.64         |
+
+<img src="doc/image/OMPSD.png">
+
+We observe similar trend as in the Ising lattice example where the parallelization overhead for MPI is smaller. The OpenMP speedup for this example seems to be even worse than the Ising lattice example. 
+
+#### Accuracy gain with more parallel chains
+Here we only present results for 4 random seeds. But the trend observed here is reflective of the actual dynamic when one runs the solver. With one chain, one typically will get the wrong solution (stuck at local mode). With two chains, there is improvement but still the result is quite inconsistent. With 4 or more chains, we can usually discover the right solution to obtain a 90%+ accuracy. Observe that the execution time for 4 or 8 chains is not significantly longer than 1 chain thanks to MPI parallelization. The accuracy on the other hand is improved drastically. 
+
+---
+Accuracy against parallel temperatures
+---
+|                                  | seed=1 | seed=2 | seed=3 | seed=4 | Average  |
+|----------------------------------|--------|--------|--------|--------|----------|
+| Accuracy w.t. 1 temp             | 23.7%  | 94.0%  | 34.0%  | 33.2%  | 46.2%    |
+| Execution time (s) w.t. 1 temp   | 34.024 | 34.514 | 34.197 | 34.056 | 34.19775 |
+|                                  |        |        |        |        |          |
+|                                  |        |        |        |        |          |
+| Accuracy w.t. 2 temp             | 91.0%  | 94.0%  | 58.2%  | 36.9%  | 70.1%    |
+| Execution time (s) w.t. 2 temp   | 36.033 | 36.937 | 35.68  | 34.467 | 35.77925 |
+|                                  |        |        |        |        |          |
+|                                  |        |        |        |        |          |
+| Accuracy w.t. 4 temp             | 94.0%  | 92.5%  | 94.0%  | 91.6%  | 93.1%    |
+| Execution time (s) w.t. 4 temp   | 36.617 | 34.624 | 34.119 | 35.015 | 35.09375 |
+|                                  |        |        |        |        |          |
+|                                  |        |        |        |        |          |
+| Accuracy w.t. 8 temp w.t. 8 temp | 94.0%  | 91.0%  | 94.0%  | 93.8%  | 93.2%    |
+| Execution time (s) w.t. 8 temps  | 35.466 | 35.483 | 49.283 | 36.84  | 39.268   |
+
+We may pot the accuracy improvement as we increase number of temperatures. 
+<img src="doc/image/TPA.png">
+
+<img src="doc/image/TPT.png">
+
