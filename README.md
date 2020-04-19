@@ -203,7 +203,7 @@ NUMA node1 CPU(s):     24-47
 To request nodes, one can either initiate an interative mode where one can interact with the reuqested resource or submit a job through slurm batch file. Our expriment is conducted in the interative mode where the following line is used to request resources:
 
 ```
-srun -p test -n 8 -N 8 -c 12 --pty --mem 1000 -t 0-30:00 /bin/bash
+srun -p test -n 8 -N 8 -c 12 --pty --mem 1000 -t 0-06:00 /bin/bash
 ```
 
 This corresponds to 8 tasks on 8 nodes where each node is equipped with 12 CPUs (i.e. maximum 12 OpenMP threads per node). 
