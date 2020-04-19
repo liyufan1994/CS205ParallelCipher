@@ -297,9 +297,10 @@ The experiment setup is the following: we have a NxN 2D Ising lattice and we run
 #### Scalability with Fixed Problem Size (Strong Scaling)
 In this section, we test algorithm performance with a fixed problem size (N=100, S=8) but increasing number of MPI processes and OpenMP threads. Recall that speedup for a fixed problem size with respect to the number of processors is governed by Amdahl's law. 
 
----
-Strong Scaling Against MPI
----
+
+##### Strong Scaling Against MPI
+
+
 | OpenMP Num | MPI Num | Execution time (s) | Speedup | Overhead (s) | Theoretic speedup |
 |------------|---------|--------------------|---------|--------------|-------------------|
 | 1          | 1       | 110.71             | 1.00    | 0.00         | 1                 |
@@ -309,9 +310,10 @@ Strong Scaling Against MPI
 
 <img src="doc/image/MPIS.png">
 
----
-Strong Scaling Against OpenMP
----
+
+##### Strong Scaling Against OpenMP
+
+
 | OpenMP Num | MPI Num | Execution time (s) | Speedup | Overhead (s) | Theoretic speedup |
 |------------|---------|--------------------|---------|--------------|-------------------|
 | 1          | 8       | 14.94              | 1.00    | 0.00         | 1                 |
@@ -327,9 +329,10 @@ It seems that the scaling is more efficient on the MPI direction. This is becaus
 #### Scalability with Increasing problem size (Weak Scaling)
 In this section, we test performance of the algorithm when the problem size is scaled to the number of processors. Recall that this is governed by Gustafson's law.
 
----
-Weak Scaling Against Number of Chains
----
+
+##### Weak Scaling Against Number of Chains
+
+
 | Problem Size: Lattice | Problem Size: Chains | MPI Num | OpenMP Num | Execution Time (s) |
 |-----------------------|----------------------|---------|------------|--------------------|
 | 2500                  | 4                    | 1       | 1          | 14.477             |
@@ -339,9 +342,10 @@ Weak Scaling Against Number of Chains
 
 <img src="doc/image/MPIW.png">
 
----
-Weak Scaling Against Lattice Size
----
+
+##### Weak Scaling Against Lattice Size
+
+
 | Problem Size: Lattice | Problem Size: Chains | MPI Num | OpenMP Num | Execution Time (s) |
 |-----------------------|----------------------|---------|------------|--------------------|
 | 10000                 | 8                    | 8       | 1          | 15.007             |
@@ -357,9 +361,9 @@ The testing results for weak scaling confirms our observations from the strong s
 #### Compare Checkerboard and Strip Decomposition
 We present the strong and weak scaling against number of OpenMP threads when we use the strip decomposition (as opposed to checkerboard pattern in previous sections).
 
----
-Strip Pattern: Strong Scaling (OpenMP)
----
+
+##### Strip Pattern: Strong Scaling (OpenMP)
+
 | OpenMP Num | MPI Num | Execution time (s) | Speedup | Overhead (s) | Theoretic speedup |
 |------------|---------|--------------------|---------|--------------|-------------------|
 | 1          | 8       | 16.527             | 1.00    | 0.00         | 1                 |
@@ -369,9 +373,8 @@ Strip Pattern: Strong Scaling (OpenMP)
 
 <img src="doc/image/OMPSS2.png">
 
----
-Strip Pattern: Weak Scaling (OpenMP)
----
+
+##### Strip Pattern: Weak Scaling (OpenMP)
 
 | Problem Size: Lattice | Problem Size: Chains | MPI Num | OpenMP Num | Execution Time (s) |
 |-----------------------|----------------------|---------|------------|--------------------|
@@ -388,9 +391,10 @@ Comparing these results with that of checkerboard pattern, it appears that strip
 Given certain number of chains, the problem size is fixed with number of characters (95 here). Therefore, we do not test weak scaling for this problem. We again present strong scaling results against MPI and OpenMP. An additional section is devoted to study the accuracy and number of parallel temperatures used. This allows us to directly witness the benefit of parallel tempering against using a single Markov chain. Here we run individual chain for 500 steps (as opposed to 1 full sweep in Ising model example) before they do an exchange. We run 100 iterations in total. We have much more steps than there are exchanges because the task here is to discover optimal solution from different starting point. It is more efficient to let each chain fully explore their respective region before initiating an exchange with each other. we set the temperature of the master chain as 10000 whereas we set other chains' temperature as 100. The point of doing this is that the master is always able to "absorb" the most optimal states. For example, if there is a solution state discovered by chain 5 that is especially "good", we then want to make sure that chain 5 will exchange this solution to chain 1. 
 
 #### Scalability
----
-Scaling Against MPI
----
+
+
+##### Scaling Against MPI
+
 | MPI Num | OpenMP Num | Accuracy | Execution time (s) | speedup | Theoretical speed up | overhead (s) |
 |---------|------------|----------|--------------------|---------|----------------------|--------------|
 | 1       | 1          | 93.5%    | 257.643            | 1.00    | 1                    | 0.00         |
@@ -400,9 +404,9 @@ Scaling Against MPI
 
 <img src="doc/image/MPISD.png">
 
----
-Scaling Against OpenMP 
----
+
+##### Scaling Against OpenMP 
+
 | MPI Num | OpenMP Num | Accuracy | Execution time (s) | speedup | Theoretical speed up | overhead (s) |
 |---------|------------|----------|--------------------|---------|----------------------|--------------|
 | 8       | 1          | 93.5%    | 35.73              | 1.00    | 1                    | 0.00         |
@@ -419,9 +423,9 @@ We observe similar trend as in the Ising lattice example where the parallelizati
 #### Accuracy gain with more parallel chains
 Here we only present results for 4 random seeds. But the trend observed here is reflective of the actual dynamic when one runs the solver. With one chain, one typically will get the wrong solution (stuck at local mode). With two chains, there is improvement but still the result is quite inconsistent. With 4 or more chains, we can usually discover the right solution to obtain a 90%+ accuracy. Observe that the execution time for 4 or 8 chains is not significantly longer than 1 chain thanks to MPI parallelization. The accuracy on the other hand is improved drastically. 
 
----
-Accuracy against parallel temperatures
----
+
+##### Accuracy against parallel temperatures
+
 |                                  | seed=1 | seed=2 | seed=3 | seed=4 | Average  |
 |----------------------------------|--------|--------|--------|--------|----------|
 | Accuracy w.t. 1 temp             | 23.7%  | 94.0%  | 34.0%  | 33.2%  | 46.2%    |
