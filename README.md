@@ -286,7 +286,7 @@ $ export KMP_AFFINITY=verbose,compact
 ### Code Profiling
 To inspect which part of the code takes the most amount of time to run, we use `gprof` to collect timing information for each of our functions.
 
-1. First, to use `gprof`, we should compile and link with the -pg option by editing the CMakeLists.txt file in the root directory. 
+1. First, to use `gprof`, we should compile and link the code with the -pg option by editing the CMakeLists.txt file in the root directory. 
 
 ```
 set(CMAKE_CXX_FLAGS "-fopenmp -pg")
