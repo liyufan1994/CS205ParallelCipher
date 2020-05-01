@@ -283,6 +283,28 @@ $ export GOMP_CPU_AFFINITY="0-5"
 ```
 $ export KMP_AFFINITY=verbose,compact
 ```
+### Code Profiling
+To inspect which part of the code takes the most amount of time to run, we use `gprof` to collect timing information for each of our functions.
+
+1. First, To use `gprof`, we should compile and link with the -pg option by editing the CMakeLists.txt file in the root directory. 
+
+```
+set(CMAKE_CXX_FLAGS "-fopenmp -pg")
+set(CMAKE_C_FLAGS "-fopenmp -pg")
+```
+
+2. Second, compile the code and then go to the bin directory to run the program normally.
+
+3. Third, type `gprof exec > out` where exec is our executable's name and out is the output file's name. Specifically, we use
+
+```
+gprof Denigma > Denigma.stats
+```
+
+```
+gprof Ising > Ising.stats
+```
+The timing information is recorded in the outputs. The second table in the output file is more informative.
 
 ## Overhead and Mitigation Strategy
 
