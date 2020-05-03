@@ -289,20 +289,42 @@ To inspect which part of the code takes the most amount of time to run, we use `
 1. First, to use `gprof`, we should compile and link the code with the -pg option by editing the CMakeLists.txt file in the root directory. 
 
 ```
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS} -pg")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS} -pg")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS} -pg")
+```
+and 
+
+```
 set(CMAKE_CXX_FLAGS "-fopenmp -pg")
 set(CMAKE_C_FLAGS "-fopenmp -pg")
-```
+``` 
 
 2. Second, compile the code and then go to the bin directory to run the program normally.
+
+```
+$ mpirun -np 4 ./Denigma
+$ mpirun -np 4 ./Ising
+```
 
 3. Third, type `gprof exec > out` where exec is our executable's name and out is the output file's name. Specifically, we use
 
 ```
-gprof Denigma > Denigma.stats
+$ gprof ./Denigma > Denigma.stats
 ```
 
 ```
-gprof Ising > Ising.stats
+$ gprof ./Ising > Ising.stats
+```
+
+or we would find a generated `gmon.out` file in the bin folder and we can use the following syntax to generate code profiling output
+
+```
+$ gprof ./Denigma gmon.out> Denigma.stats
+```
+
+```
+$ gprof ./Ising gmon.out > Ising.stats
 ```
 The timing information is recorded in the outputs. The second table in the output file is more informative.
 
