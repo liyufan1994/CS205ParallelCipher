@@ -9,7 +9,7 @@ We designed and implemented an "HPC-version" of Replica Exchange MCMC sampling (
 ### The need for HPC
 MCMC algorithm only provides an approximation of the correct sampling. One needs to run the underlying Markov chains sufficiently long to obtain accurate simulation. For high-dimensional problems, each step of the chain could take tens of thousands of float point operation and the chain itself often requires thousands of such steps to converge. For instance, simulating Ising model of moderate size (e.g. 64x64 lattice), each step of the Gibbs sampler requires 64x64x7=28672 floating point operations and convergence could take 10000+ steps. Application in cryptography exhibits similar demands for intensive computation. To exacerbate the problem, one single chain rarely offers optimal performance for such high dimensional problems. Practitioners often need to run an ensemble of S **communicating** Markov chains at different temperatures to attain satisfactory mixing at each temperature level. S ranges from 10 to 50 (or more). The computational burden is S-fold of a single Markov chain for serial implementation. 
 
-## Problem description and comparison with existing work of parallelization
+## Problem Description 
 In this section, we give a succinct account of two problems we seek to solve with Replica Exchange MCMC Sampling: (i) Simulating Ising lattice; (ii) decipher encrypted texts. 
 
 ### Statistical Mechanics: Simulating Ising Lattice
@@ -50,7 +50,7 @@ Parallelize Replica Exchange MCMC Sampling is often applied to sample <img src="
 
 
 
-## Algorithms and Parallelization Strategy
+## Algorithm and Parallelization Application
 We will first introduce replica exchange MCMC sampling and why a hybrid of distributed memory processing (MPI) and shared-memory processing (OpenMP) will be a particularly suitable solution for parallelization.
 
 ### Architectural Overview
@@ -125,8 +125,16 @@ We use different exchange schedule for the Ising model application and the decip
 
 The deciphering application follows a "star model". In particular, the proposal will be to exchange chain 1 and chain i sequentially. The reason for doing this is that we would like chain 1 to be the solution key at the end. As a result, we would like to constantly check if other chains have obtained a more optimal solution.
 
+## Comparison with existing work of parallelization
+There are many works on parallelization of Ising lattice simulation: most commonly researchers experiment accelerate full sweep of Gibbs sampling of Ising lattice via OpenMP threads or GPU. For the former, see [1][2]. For the latter, see [3][4][5]. The hybrid parallelization implementation is relatively scarce and the existing solutions do not leverage MPI level of parallelization for the purpose of running replica exchange MCMC chains--they simply use MPI parallelization for the compute partitions of a massive Ising lattice (see [6]). Parallelization for MCMC deciphering is not of widespread interest and there are few papers discussing parallelization strategies. That said, existing solutions do mostly use replica exchange MCMC which is straightforward to implement in parallel: see [7], [8]. They generally do not explicitly leverage HPC techniques in their implementation and currently available implementations on internet is mostly sequential: e.g. [9] [10].  There are also works that discuss parallelization of replica exchange MCMC in general: [11] [12]. But they do not specifically test their methods no the two applications we consider here. 
+
+
 ## Reproduction Instructions and System Specification
-This code may be run on local machine or a cluster. Please check the dependencies below. But it was mainly run on CANNON computing cluster at Harvard FAS Research computing. We will provide instructions and slurm commands. 
+This code may be run on local machine or a cluster. Please check the dependencies below. 
+
+**Since the code was mainly tested on CANNON computing cluster at Harvard FAS Research computing, we strongly recommend the teaching team grades the project on Cannon. We will provide detailed instructions to set up the project on Cannon below.**
+
+
 
 ### Operating System and distribution
 Our testing is done on Linux system (CentOS) but it should also work with Mac OS once one has the required compiler and MPI installed.
@@ -212,7 +220,12 @@ This corresponds to 8 tasks on 8 nodes where each node is equipped with 12 CPUs 
 
 ### The instruction to compile and run the project:
 
-1. Clone the repo from github
+1. Log into your Cannon account if you intend to run it on cannon. First request nodes and then load modules as in the last section. Then clone the repo from github:
+
+```
+$ git clone https://github.com/liyufan1994/CS205ParallelMCMC.git
+```
+
 2. Find the paths to mpicc and mpic++ compiler on your own machine by typing 
 
 ```
@@ -223,18 +236,12 @@ $ which mpicc
 $ which mpic++
 ```
 
-3. Go to root directory and modify the following lines in the CMakeLists.txt file: replace "/usr/local/bin/mpicc" 
-and "/usr/local/bin/mpic++" with the paths you find in step 2.
+3. Go to root directory and modify the following lines in the CMakeLists.txt file: replace them with the paths you find in step 2. This is basically redirects path to correct location of your mpicc mpic++ compiler. 
 
 ```
-set(CMAKE_C_COMPILER /usr/local/bin/mpicc)
+set(CMAKE_C_COMPILER /n/helmod/apps/centos7/Comp/gcc/9.2.0-fasrc01/openmpi/4.0.2-fasrc01/bin/mpicc)
+set(CMAKE_CXX_COMPILER /n/helmod/apps/centos7/Comp/gcc/9.2.0-fasrc01/openmpi/4.0.2-fasrc01/bin/mpic++)
 ```
-
-```
-set(CMAKE_CXX_COMPILER /usr/local/bin/mpic++)
-```
-
-This step tell the cmake which compiler to use
 
 4. In the root directory, type
 
@@ -260,12 +267,13 @@ Denigma
 6. Type the following to run the code (with 4 tasks)
 
 ```
-$ mpirun -np 4 ./Denigma
+$ mpirun -np 4 ./Denigma 1
 ```
 
 ```
-$ mpirun -np 4 ./Ising
+$ mpirun -np 4 ./Ising 32 1 1
 ```
+Denigma is executable for decipering application: the argument is number of Markov chains per MPI process. Ising is executable for Ising model application: the first argument is side length of Ising lattice to simulate (32 here), second argument is number of Markov chains per MPI process, third argument is type of OpenMP decomposition (0 is strip patter, 1 is checkerboard pattern)
 
 7. One may alter number of OpenMP threads by setting OMP_NUM_THREAD environment variable before mpirun;
 
@@ -283,6 +291,7 @@ $ export GOMP_CPU_AFFINITY="0-5"
 ```
 $ export KMP_AFFINITY=verbose,compact
 ```
+
 ### Code Profiling
 To inspect which part of the code takes the most amount of time to run, we use `gprof` to collect timing information for each of our functions.
 
@@ -328,7 +337,44 @@ $ gprof ./Ising gmon.out > Ising.stats
 ```
 The timing information is recorded in the outputs. The second table in the output file is more informative.
 
-## Overhead and Mitigation Strategy
+
+## Theoretical Complexity and speedup
+Suppose that we need to run S concurrent, communicating Markov chains for a total of T steps, and that each steps requires N computation (for either acceptance ratio or Gibbs sweep). Then the computing complexity is O(T\*S\*N). For the Ising model, the N is the size of the Ising lattices whereas for deciphering application, N is square of number of characters to encode/decode. 
+
+Suppose our parallelization solution uses R MPI nodes whereas each node uses M OpenMP threads. Then the theoretic speedup is R\*M. Then the theoretic complexity of the parallel algorithm is O(T\*S\*N/M\*R). 
+
+## Overheads and Mitigation Strategy
+Generally speaking, the overheads come from two levels of parallelization: 
+
+1. Synchronization and communication of MPI processes;
+2. Synchronization of OpenMP threads.
+
+Our first strategy to mitigate MPI overheads is to reduce frequency of MPI exchanges from once pre step for usual parallel tempering algorithm to once per several steps. This modification is motivated by the realization that parallel exchanges are mainly for the purpose of bringing Markov chains at low temperature out of their local maxima. Therefore, reducing frequency of exchanges will not have a great impact on the overall performance of the algorithm. 
+
+The second strategy to mitigate MPI overheads is to modify exchange schedule according to the specific application: for Ising model, we only proposes to exchange to neighboring chains--this is because the probability for two chains with large temperature difference to be accepted is slim. For the deciphering example, we only propose to exchange the first chains with other chains where the chain to be exchanged with the first chain is determined through a deterministic scan. The point is that we would like to output the maximum-likelihood solution found by just the first chain and it will keep picking up the most optimal solutions found by all the other chains (randomly started at various places) and refine the search locally. 
+
+To mitigate synchronization of OpenMP threads, we allow the user to choose strip pattern or checkerboard pattern decomposition. The strip pattern simply chops the lattice into several blocks and assign them to OpenMP threads. As a result, strip pattern outperforms checkboarder's performance (see performance evaluation section below) when there are relatively few OpenMP treads and each Ising lattice partition block is large. On the other hand, since each strip needs to contain at least two rows, there cannot be too many OpenMP threads at once. Checkerboard pattern however can accomodate a large number of parallel threads and is more suitable for relatively small lattice. 
+
+
+## Software Design
+### Directory structure, executables and shared libraries
+The source code is located within the src folder whereas the common utility libraries are compiled into lib folder where libArrayUtils.so includes utility functions for array operations and libSamplingUtils.so includes utility functions for sampling and randomization. 
+
+The executables are Ising and Denigma whereas the former is executable for the Ising application and the latter is executable for the deciphering application. They are included in the bin folder. 
+
+The input files (texts to decipher and intermediate deciphering texts) are located in the "data" folder.
+
+### Code Structure
+We opted to not use object-oriented-programming (OOP) but to use "scripting" because the application is largely procedural and focuses on computation. OOP may also affect computing performance. 
+
+The main function for Ising model application located in Ising.cpp. The main function for deciphering application located in decipher.cpp. Main functions parse user arguments and calls modules that process inputs and outputs as well as deploying the main computational module: "ParallelChains". This function implements the replica exchange MCMC logic and associated MPI exchange logic. It also evaluates target density function by a helper function ("OneChainIsing" for Ising model and "logtarget" for decryption); the helper function uses OpenMP to parallelize computation required for each step of the chain. Utility functions such as array operations and randomizations are implemented as shared libraries. 
+
+
+## Advanced Features
+The two-level hybrid parallelization archetecture is novel and in our opinion is especially appropriate for replica exchange MCMC algorithm. The course (e.g. last problem in HW2) has explored parallelizing a problem on hybrid archetectures but the way the algorithm is decomposed to parallel computing units does not really differ across level of parallelism. Our solution to decompose the problem at two different dimensions (across different Markov chains and computation within each step of each chain) has not been explored in the course.  We also explored different exchange strategy appropriate for each application where the Ising model uses neighboring exchange and deciphering application uses "centralized, systematic" scans in search for optimal solution. 
+
+On the OpenMP level, we explored two relatively sophisticated strategies to partition the lattice that use different stages of updates on one single sweep of the lattice. This adds to the "padding" techniques explored in the course. That is, as an alternative to "padding", we decouple the dependencies of different partition blocks of the lattice by introducing two stages of updates where updates within each stage are applied to sites that are independent of the other partition blocks. We impelemented two decomposition schemes (the strip pattern and checkerboard pattern) that have different strength and weakness when it comes to parallel computing. These patterns are typical to matrix/lattice decomposition in HPC but have not been covered in the course in detail. 
+
 
 ## Performance Evaluation 
 We apply the paralleled replica exchange MCMC algorithm to two different problems: Ising lattice simulation and decryption. The purpose of testing the algorithm of two problems (as opposed to one) is that these two problems tend to reflect different aspects of the performance of the algorithm. For the Ising model, we focus on testing raw computing speed and scalability of the algorithm as we increase the problem size (size of the lattice and number of chains in the ensemble). For the decryption problem, we can explicitly evaluate improvement of decryption accuracy under fixed time budget--with MPI-level parallelization we can run more chains to broaden our search and avoid minima trap whereas with OpenMP-level parallelization we can run longer chains to make the search more thorough. 
@@ -492,3 +538,39 @@ We may pot the accuracy improvement as we increase number of temperatures.
 
 <img src="doc/image/TPT.png">
 
+
+
+
+## Lessons Learned and Future Improvement
+This project propels us to think of hybrid parallelization in a different way. Indeed, there are usually multiple, nested layers within computational algorithms such as replica exchange MCMC. For instance, we may parallelize the algorithm by each Markov chain in the ensemble in the first layer and then parallelize computation within each chain in the second layer. It then makes sense to consider hybrid parallelization to take advantage of corresponding multi-layered hardware archetecture (nodes, threads etc.) to describe the multi-layered parallelization structure within the algorithm. 
+
+We have also learned different ways to decompose a lattice. In particular, the checkerboard pattern decouples dependencies of lattice sites in a very efficient way and is specific to the form of density function of Boltzmann distribution. 
+
+Future work could consider replace the OpenMP level of parallelization with OpenACC/GPU which would most likely further increase speedup from parallelization. Then it would be interesting to increase an additional layer of parallelization. That is, we may consider further break up the OpenMP step to multiple nodes. Conceptually, this is to substitue the shared-memory processing within each chain with a hybrid paralellization strategy again. Thus one chain will be run on multiple MPI processes. 
+
+
+## Reference
+
+[1] Nagai, T. and Okamoto, Y., 2012. Simulated tempering and magnetizing: Application of two-dimensional simulated tempering to the two-dimensional Ising model and its crossover. Physical Review E, 86(5), p.056705.
+
+[2] Massaioli, F., Castiglione, F. and Bernaschi, M., 2005. OpenMP parallelization of agent-based models. Parallel Computing, 31(10-12), pp.1066-1081.
+
+[3] Preis, T., Virnau, P., Paul, W. and Schneider, J.J., 2009. GPU accelerated Monte Carlo simulation of the 2D and 3D Ising model. Journal of Computational Physics, 228(12), pp.4468-4477.
+
+[4] Weigel, M., 2011. Simulating spin models on GPU. Computer Physics Communications, 182(9), pp.1833-1836.
+
+[5] Block, B., Virnau, P. and Preis, T., 2010. Multi-GPU accelerated multi-spin Monte Carlo simulations of the 2D Ising model. Computer Physics Communications, 181(9), pp.1549-1556.
+
+[6] Schurz, F., Fey, D. and Berkov, D., 2006, May. Parallelization of simulations for various magnetic system models on small-sized cluster computers with MPI. In International Conference on Computational Science and Its Applications (pp. 129-138). Springer, Berlin, Heidelberg.
+
+[7] Fan, Z. and Wen, Y., 2016. Decipher with Tempered MCMC.
+
+[8] Kocmánek, T., 2013. MCMC Decryption.
+
+[9] https://github.com/anunayarunav/MCMC-Deciphering
+
+[10] https://github.com/sharath/MCMC-decipher
+
+[11] Li, Y., Mascagni, M. and Gorin, A., 2009. A decentralized parallel implementation for parallel tempering algorithm. Parallel Computing, 35(5), pp.269-283.
+
+[12] Li, Y., Protopopescu, V.A., Arnold, N., Zhang, X. and Gorin, A., 2009. Hybrid parallel tempering and simulated annealing method. Applied Mathematics and Computation, 212(1), pp.216-228.
