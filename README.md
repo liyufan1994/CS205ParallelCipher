@@ -416,6 +416,25 @@ In this section, we test algorithm performance with a fixed problem size (N=100,
 It seems that the scaling is more efficient on the MPI direction. This is because exchange at each step only involves two of the MPI processes and thus the overhead due to this exchange is expected to be O(1) against number of MPI processes. Also the exchange is relatively lightweight. The fact we run the algorithm on high bandwidth hardware (Cannon as opposed to AWS) also contributes to the efficiency. The OpenMP carries heavier overhead mainly because the complexity of the parallelization is higher: each sweep involves OpenMP threads go through the lattice entries following the checkerboard pattern. The overhead associated with synchronizing these threads may increase with the number of threads used.
 
 
+
+##### Strong Scaling Against OpenMP Scheduling Type (static, dynamic, guided)
+
+In this section, we test algorithm performance with a fixed problem size (N=100, S=8), a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP Scheduling Type (static, dynamic, guided). 
+
+
+| OpenMP Scheduling Type | Execution time (s) | Overhead (s) |
+|------------------------|--------------------|--------------|
+| static                 | 39.82              | 4.145        |
+| dynamic                | 38.339             | 2.766        |
+| guided                 | 37.974             | 2.370        |
+
+<img src="doc/image/Ising_scheduling.png">
+<img src="doc/image/Ising_scheduling_overhead.png">
+
+According to the table, the `guided` scheduling has the best performance with least execution time and overhead.
+
+
+
 #### Scalability with Increasing problem size (Weak Scaling)
 In this section, we test performance of the algorithm when the problem size is scaled to the number of processors. Recall that this is governed by Gustafson's law.
 
@@ -509,6 +528,24 @@ Given certain number of chains, the problem size is fixed with number of charact
 <img src="doc/image/OMPSD.png">
 
 We observe similar trend as in the Ising lattice example where the parallelization overhead for MPI is smaller. The OpenMP speedup for this example seems to be even worse than the Ising lattice example. 
+
+
+##### Scaling Against OpenMP Scheduling Type (static, dynamic, guided)
+
+In this section, we test algorithm performance with a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP Scheduling Type (static, dynamic, guided). 
+
+
+| OpenMP Scheduling Type | Accuracy | Execution time (s) | Overhead (s) |
+|------------------------|----------|--------------------|--------------|
+| static                 | 94.2%    | 63.33              | 22.822       |
+| dynamic                | 94.0%    | 69.68              | 20.385       |
+| guided                 | 94.0%    | 44.10              | 4.061        |
+
+<img src="doc/image/Denigma_scheduling.png">
+
+<img src="doc/image/Denigma_scheduling_overhead.png">
+
+According to the table, `guided` scheduling has the best performance with least execution time and overhead. The `guided` scheduling has much lower Overhead than `static` and `dynamic` scheduling. There is no significant difference in Accuracy on the three different schedulings.
 
 #### Accuracy gain with more parallel chains
 Here we only present results for 4 random seeds. But the trend observed here is reflective of the actual dynamic when one runs the solver. With one chain, one typically will get the wrong solution (stuck at local mode). With two chains, there is improvement but still the result is quite inconsistent. With 4 or more chains, we can usually discover the right solution to obtain a 90%+ accuracy. Observe that the execution time for 4 or 8 chains is not significantly longer than 1 chain thanks to MPI parallelization. The accuracy on the other hand is improved drastically. 
