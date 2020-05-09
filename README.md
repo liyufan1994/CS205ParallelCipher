@@ -419,7 +419,7 @@ It seems that the scaling is more efficient on the MPI direction. This is becaus
 
 ##### Strong Scaling Against OpenMP Scheduling Type (static, dynamic, guided)
 
-In this section, we test algorithm performance with a fixed problem size (N=100, S=8), a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP Scheduling Type (static, dynamic, guided). 
+In this section, we test algorithm performance with a fixed problem size (N=100, S=8), a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP scheduling types (static, dynamic, guided). 
 
 
 | OpenMP Scheduling Type | Execution time (s) | Overhead (s) |
@@ -532,7 +532,7 @@ We observe similar trend as in the Ising lattice example where the parallelizati
 
 ##### Scaling Against OpenMP Scheduling Type (static, dynamic, guided)
 
-In this section, we test algorithm performance with a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP Scheduling Type (static, dynamic, guided). 
+In this section, we test algorithm performance with a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP scheduling types (static, dynamic, guided). 
 
 
 | OpenMP Scheduling Type | Accuracy | Execution time (s) | Overhead (s) |
