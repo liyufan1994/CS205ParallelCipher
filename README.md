@@ -126,7 +126,7 @@ We use different exchange schedule for the Ising model application and the decip
 The deciphering application follows a "star model". In particular, the proposal will be to exchange chain 1 and chain i sequentially. The reason for doing this is that we would like chain 1 to be the solution key at the end. As a result, we would like to constantly check if other chains have obtained a more optimal solution.
 
 ## Comparison with existing work of parallelization
-There are many works on parallelization of Ising lattice simulation: most commonly researchers experiment accelerate full sweep of Gibbs sampling of Ising lattice via OpenMP threads or GPU. For the former, see [1][2]. For the latter, see [3][4][5]. The hybrid parallelization implementation is relatively scarce and the existing solutions do not leverage MPI level of parallelization for the purpose of running replica exchange MCMC chains--they simply use MPI parallelization for the compute partitions of a massive Ising lattice (see [6]). Parallelization for MCMC deciphering is not of widespread interest and there are few papers discussing parallelization strategies. That said, existing solutions do mostly use replica exchange MCMC which is straightforward to implement in parallel: see [7], [8]. They generally do not explicitly leverage HPC techniques in their implementation and currently available implementations on internet is mostly sequential: e.g. [9] [10].  There are also works that discuss parallelization of replica exchange MCMC in general: [11] [12]. But they do not specifically test their methods no the two applications we consider here. 
+There are many works on parallelization of Ising lattice simulation: most commonly researchers experiment accelerate full sweep of Gibbs sampling of Ising lattice via OpenMP threads or GPU. For the former, see [1][2]. For the latter, see [3][4][5]. The hybrid parallelization implementation is relatively scarce and the existing solutions do not leverage MPI level of parallelization for the purpose of running replica exchange MCMC chains--they simply use MPI parallelization for the compute partitions of a massive Ising lattice (see [6]). Parallelization for MCMC deciphering is not of widespread interest and there are few papers discussing parallelization strategies. That said, existing solutions do mostly use replica exchange MCMC which is straightforward to implement in parallel: see [7], [8]. They generally do not explicitly leverage HPC techniques in their implementation and currently available implementations on internet is mostly sequential: e.g. [9] [10].  There are also works that discuss parallelization of replica exchange MCMC in general: [11] [12]. But they do not specifically test their methods on the two applications we consider here. 
 
 
 ## Reproduction Instructions and System Specification
@@ -172,7 +172,7 @@ Or if one prefers to use Intel C compiler (better OpenMP threads affinity suppor
 module load intel/19.0.5-fasrc01 openmpi/4.0.1-fasrc01
 ```
 
-### Hardware Archetecture
+### Hardware Architecture
 The following information is provided at the Harvard FAS research computing website: 
 
 "The new Cannon cluster is primarily comprised of 670 Lenovo SD650 NeXtScale servers, part of their new liquid-cooled Neptune line. Each chassis unit contains two nodes, each containing two Intel 8268 "Cascade Lake" processors and 192GB RAM per node. The nodes are interconnected by HDR 100 Gbps Infiniband (IB) in a single Fat Tree with a 200 Gbps IB core. "
