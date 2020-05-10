@@ -422,16 +422,16 @@ It seems that the scaling is more efficient on the MPI direction. This is becaus
 In this section, we test algorithm performance with a fixed problem size (N=100, S=8), a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP scheduling types (static, dynamic, guided). 
 
 
-| OpenMP Scheduling Type | Execution time (s) | Overhead (s) |
-|------------------------|--------------------|--------------|
-| static                 | 39.82              | 4.145        |
-| dynamic                | 38.339             | 2.766        |
-| guided                 | 37.974             | 2.370        |
+| OpenMP Scheduling Type | Execution time (s) |
+|------------------------|--------------------|
+| static                 | 39.82              | 
+| dynamic                | 38.339             | 
+| guided                 | 37.974             | 
 
 <img src="doc/image/Ising_scheduling.png">
-<img src="doc/image/Ising_scheduling_overhead.png">
 
-According to the table, the `guided` scheduling has the best performance with least execution time and overhead.
+
+According to the table, the `guided` scheduling has the best performance with least execution time.
 
 
 
@@ -535,17 +535,16 @@ We observe similar trend as in the Ising lattice example where the parallelizati
 In this section, we test algorithm performance with a fixed OpenMP Num = 1 and a fixed MPI num = 8, but test on different OpenMP scheduling types (static, dynamic, guided). 
 
 
-| OpenMP Scheduling Type | Accuracy | Execution time (s) | Overhead (s) |
-|------------------------|----------|--------------------|--------------|
-| static                 | 94.2%    | 63.33              | 22.822       |
-| dynamic                | 94.0%    | 69.68              | 20.385       |
-| guided                 | 94.0%    | 44.10              | 4.061        |
+| OpenMP Scheduling Type | Accuracy | Execution time (s) |
+|------------------------|----------|--------------------|
+| static                 | 94.2%    | 63.33              |
+| dynamic                | 94.0%    | 69.68              |
+| guided                 | 94.0%    | 44.10              |
 
 <img src="doc/image/Denigma_scheduling.png">
 
-<img src="doc/image/Denigma_scheduling_overhead.png">
 
-According to the table, `guided` scheduling has the best performance with least execution time and overhead. The `guided` scheduling has much lower Overhead than `static` and `dynamic` scheduling. There is no significant difference in Accuracy on the three different schedulings.
+According to the table, `guided` scheduling has the best performance with least execution time. There is no significant difference in Accuracy on the three different schedulings.
 
 #### Accuracy gain with more parallel chains
 Here we only present results for 4 random seeds. But the trend observed here is reflective of the actual dynamic when one runs the solver. With one chain, one typically will get the wrong solution (stuck at local mode). With two chains, there is improvement but still the result is quite inconsistent. With 4 or more chains, we can usually discover the right solution to obtain a 90%+ accuracy. Observe that the execution time for 4 or 8 chains is not significantly longer than 1 chain thanks to MPI parallelization. The accuracy on the other hand is improved drastically. 
