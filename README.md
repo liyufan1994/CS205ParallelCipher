@@ -544,7 +544,7 @@ In this section, we test algorithm performance with a fixed OpenMP Num = 1 and a
 <img src="doc/image/Denigma_scheduling.png">
 
 
-According to the table, `guided` scheduling has the best performance with least execution time. There is no significant difference in Accuracy on the three different schedulings.
+According to the table, `guided` scheduling has the best performance with least execution time. There is no significant difference in accuracy on the three different schedulings.
 
 #### Accuracy gain with more parallel chains
 Here we only present results for 4 random seeds. But the trend observed here is reflective of the actual dynamic when one runs the solver. With one chain, one typically will get the wrong solution (stuck at local mode). With two chains, there is improvement but still the result is quite inconsistent. With 4 or more chains, we can usually discover the right solution to obtain a 90%+ accuracy. Observe that the execution time for 4 or 8 chains is not significantly longer than 1 chain thanks to MPI parallelization. The accuracy on the other hand is improved drastically. 
